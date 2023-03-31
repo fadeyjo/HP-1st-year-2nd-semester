@@ -17,6 +17,7 @@ int Employee::countEmployee;
 Astronaut* Astronaut::astronauts;
 Employee* Employee::employee;
 
+//dsadasdadasada
 int main()
 {
 	SetConsoleCP(1251);
