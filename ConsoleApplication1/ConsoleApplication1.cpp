@@ -8,7 +8,7 @@
 using namespace std;
 using namespace GEV;
 
-bool Menu::exit = false;
+bool Menu::exitFromMenu = false;
 Visitor Menu::visitor;
 Menu** Menu::lastMenu;
 int Menu::countLastMenuItems;
@@ -17,7 +17,6 @@ int Employee::countEmployee;
 Astronaut* Astronaut::astronauts;
 Employee* Employee::employee;
 
-//dsadasdadasada
 int main()
 {
 	SetConsoleCP(1251);

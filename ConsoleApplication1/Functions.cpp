@@ -1,64 +1,114 @@
 #include "Functions.h"
 
-using std::cout;
-using std::endl;
-using std::string;
-using std::cin;
-
 namespace GEV
 {
 	bool operator>(const Human& human1, const Human& human2)
 	{
 		return human1.age > human2.age;
 	}
+
 	bool operator<(const Human& human1, const Human& human2)
 	{
 		return human1.age < human2.age;
 	}
+
 	std::ostream& operator<<(std::ostream& out, const Human& human)
 	{
-		string spaceSuit;
-		if (human.spaceSuit == S1)
+		std::string spaceSuit;
+		switch (human.spaceSuit)
+		{
+		case S1:
 		{
 			spaceSuit = "S1";
+			break;
 		}
-		else
+		case S2:
 		{
 			spaceSuit = "S2";
+			break;
 		}
-		out << "Имя: " << human.name << endl << "Фамилия: " << human.surname << endl << "Возраст: " << human.age << endl << "Скафандр: " << spaceSuit << endl << endl;
+		case S3:
+		{
+			spaceSuit = "S3";
+			break;
+		}
+		default:
+		{
+			spaceSuit = "S4";
+			break;
+		}
+		}
+		out << "Имя: " << human.name << std::endl << "Фамилия: " << human.surname << std::endl << "Возраст: " << human.age << std::endl << "Скафандр: " << spaceSuit << std::endl << std::endl;
 		return out;
 	}
+
 	std::istream& operator>>(std::istream& in, Human& human)
 	{
-		cout << "Имя: ";
+		std::cout << "Имя: ";
 		in >> human.name;
-		cout << "Фамилия: ";
+		std::cout << std::endl;
+		std::cout << "Фамилия: ";
 		in >> human.surname;
-		cout << "Возраст: ";
+		std::cout << std::endl;
+		std::cout << "Возраст: ";
 		in >> human.age;
-		cout << "Логин: ";
+		std::cout << std::endl;
+		std::cout << "Логин: ";
 		in >> human.login;
-		cout << "Пароль: ";
+		std::cout << std::endl;
+		std::cout << "Пароль: ";
 		in >> human.password;
+		std::cout << std::endl;
+		std::cout << "Выберите скафандр. Возможные варианты:" << std::endl;
+		std::cout << "[1]    S1." << std::endl;
+		std::cout << "[2]    S2." << std::endl;
+		std::cout << "[3]    S3." << std::endl;
+		std::cout << "[4]    S4." << std::endl;
+		std::cout << "Скафандр: ";
+		int command = 0;
+		std::cin >> command;
+		switch (command)
+		{
+		case 1:
+		{
+			human.spaceSuit = S1;
+			break;
+		}
+		case 2:
+		{
+			human.spaceSuit = S2;
+			break;
+		}
+		case 3:
+		{
+			human.spaceSuit = S3;
+			break;
+		}
+		default:
+		{
+			human.spaceSuit = S4;
+			break;
+		}
+		}
 		return in;
 	}
+
 	void exit()
 	{
-		Menu::exit = true;
+		Menu::exitFromMenu = true;
 	}
 
 	void logIn()
 	{
-		cout << "Авторизация." << endl;
-		cout << "Логин: ";
-		string login;
-		cin >> login;
-		cout << "Пароль: ";
-		string password;
-		cin >> password;
-		string loginTXT;
-		string passwordTXT;
+		std::cout << "Авторизация." << std::endl;
+		std::cout << "Логин: ";
+		std::string login;
+		std::cin >> login;
+		std::cout << "Пароль: ";
+		std::string password;
+		std::cin >> password;
+		std::string loginTXT;
+		std::string passwordTXT;
 		bool isFind = false;
 		std::ifstream fin("AdminTools.txt");
 		while (!fin.eof() and !isFind)
@@ -92,7 +142,7 @@ namespace GEV
 		system("cls");
 		if (!isFind)
 		{
-			cout << "Нет данных о посетителе. Повторите попытку!" << endl;
+			std::cout << "Нет данных о посетителе. Повторите попытку!" << std::endl;
 			system("pause");
 			system("cls");
 			Menu::runMenu(Menu::lastMenu, Menu::countLastMenuItems);
@@ -101,7 +151,7 @@ namespace GEV
 		{
 			if (Menu::visitor == admin)
 			{
-				cout << "Вы зашли как админ." << endl;
+				std::cout << "Вы зашли как админ." << std::endl;
 				system("pause");
 				system("cls");
 				createAdminMenu();
@@ -109,7 +159,7 @@ namespace GEV
 			}
 			else
 			{
-				cout << "Вы зашли как пользователь." << endl;
+				std::cout << "Вы зашли как пользователь." << std::endl;
 				system("pause");
 				system("cls");
 
@@ -119,18 +169,18 @@ namespace GEV
 
 	void registrationAsAdmin()
 	{
-		cout << "Регистрация админа." << endl;
-		cout << "Логин: ";
-		string login;
-		cin >> login;
-		cout << "Пароль: ";
-		string password;
-		cin >> password;
+		std::cout << "Регистрация админа." << std::endl;
+		std::cout << "Логин: ";
+		std::string login;
+		std::cin >> login;
+		std::cout << "Пароль: ";
+		std::string password;
+		std::cin >> password;
 		std::ofstream fout("AdminTools.txt", std::ofstream::app);
 		fout << '\n' << '\n' << login << '\n' << password;
 		fout.close();
 		system("cls");
-		cout << "Вы зарегистрировали админа." << endl;
+		std::cout << "Вы зарегистрировали админа." << std::endl;
 		system("pause");
 		system("cls");
 		Menu::runMenu(Menu::lastMenu, Menu::countLastMenuItems);
@@ -138,18 +188,18 @@ namespace GEV
 
 	void registrationAsUser()
 	{
-		cout << "Регистрация пользователя." << endl;
-		cout << "Логин: ";
-		string login;
-		cin >> login;
-		cout << "Пароль: ";
-		string password;
-		cin >> password;
+		std::cout << "Регистрация пользователя." << std::endl;
+		std::cout << "Логин: ";
+		std::string login;
+		std::cin >> login;
+		std::cout << "Пароль: ";
+		std::string password;
+		std::cin >> password;
 		std::ofstream fout("UserTools.txt", std::ofstream::app);
 		fout << '\n' << '\n' << login << '\n' << password;
 		fout.close();
 		system("cls");
-		cout << "Вы зарегистрировали пользователя." << endl;
+		std::cout << "Вы зарегистрировали пользователя." << std::endl;
 		system("pause");
 		system("cls");
 		Menu::runMenu(Menu::lastMenu, Menu::countLastMenuItems);
@@ -194,16 +244,20 @@ namespace GEV
 
 		int countFiltrMenuItems = 2;
 		Menu** filtrMenu = new Menu * [countFiltrMenuItems];
-		int countFiltrEmployeeMenuItems = 2;
+		int countFiltrEmployeeMenuItems = 4;
 		Menu** filtrEmployeeMenu = new Menu * [countFiltrEmployeeMenuItems];
-		filtrEmployeeMenu[0] = new Menu(filtrUpEmployee, new char[255] {"[1]    Фильрация по нижней границе возраста."});
-		filtrEmployeeMenu[1] = new Menu(filtrDownEmployee, new char[255] {"[2]    Фильтрация по верхней границе возраста."});
-		filtrMenu[0] = new Menu(sortEmployeeMenu, new char[255] {"[1]    Фильтрация базы данных сотрудников."}, countFiltrEmployeeMenuItems);
-		int countFiltrAstronautsMenuItems = 2;
+		filtrEmployeeMenu[0] = new Menu(filtrEmployeeSpaceSuitS1, new char[255] {"[1]    Фильтрация сотрудников по скафандру типа S1."});
+		filtrEmployeeMenu[1] = new Menu(filtrEmployeeSpaceSuitS2, new char[255] {"[2]    Фильтрация сотрудников по скафандру типа S2."});
+		filtrEmployeeMenu[2] = new Menu(filtrEmployeeSpaceSuitS3, new char[255] {"[3]    Фильтрация сотрудников по скафандру типа S3."});
+		filtrEmployeeMenu[3] = new Menu(filtrEmployeeSpaceSuitS4, new char[255] {"[4]    Фильтрация сотрудников по скафандру типа S4."});
+		filtrMenu[0] = new Menu(filtrEmployeeMenu, new char[255] {"[1]    Фильтрация базы данных сотрудников по скафандру."}, countFiltrEmployeeMenuItems);
+		int countFiltrAstronautsMenuItems = 4;
 		Menu** filtrAstronautsMenu = new Menu * [countFiltrAstronautsMenuItems];
-		filtrAstronautsMenu[0] = new Menu(filtrUpAstronauts, new char[255] {"[1]    Фильрация по нижней границе возраста."});
-		filtrAstronautsMenu[1] = new Menu(filtrDownAstronauts, new char[255] {"[2]    Фильтрация по верхней границе возраста."});
-		filtrMenu[1] = new Menu(filtrAstronautsMenu, new char[255] {"[2]    Фильтрация базы данных астронавтов."}, countFiltrAstronautsMenuItems);
+		filtrAstronautsMenu[0] = new Menu(filtrAstronautsSpaceSuitS1, new char[255] {"[1]    Фильтрация астронавтов по скафандру типа S1."});
+		filtrAstronautsMenu[1] = new Menu(filtrAstronautsSpaceSuitS2, new char[255] {"[2]    Фильтрация астронавтов по скафандру типа S2."});
+		filtrAstronautsMenu[2] = new Menu(filtrAstronautsSpaceSuitS3, new char[255] {"[3]    Фильтрация астронавтов по скафандру типа S3."});
+		filtrAstronautsMenu[3] = new Menu(filtrAstronautsSpaceSuitS4, new char[255] {"[4]    Фильтрация астронавтов по скафандру типа S4."});
+		filtrMenu[1] = new Menu(filtrAstronautsMenu, new char[255] {"[1]    Фильтрация базы данных сотрудников по скафандру."}, countFiltrAstronautsMenuItems);
 		adminMenu[4] = new Menu(filtrMenu, new char[255] {"[5]    Фильтрация баз данных."}, countFiltrMenuItems);
 
 		int countAddMenuItems = 2;
@@ -226,39 +280,15 @@ namespace GEV
 
 	void createDataBaseEmployee()
 	{
-		cout << "Склько сотрудников вы хотите ввести: ";
-		cin >> Employee::countEmployee;
+		std::cout << "Сколько сотрудников вы хотите ввести: ";
+		std::cin >> Employee::countEmployee;
 		Employee::employee = new Employee[Employee::countEmployee];
 		for (int i = 0; i < Employee::countEmployee; i++)
 		{
-			cout << "Имя: ";
-			string name;
-			cin >> name;
-			Employee::employee[i].setName(name);
-
-			cout << "Фамилия: ";
-			string surname;
-			cin >> surname;
-			Employee::employee[i].setSurname(surname);
-
-			cout << "Возраст: ";
-			int age;
-			cin >> age;
-			Employee::employee[i].setAge(age);
-
-			Employee::employee[i].setSpaceSuit();
-
-			cout << "Логин: ";
-			string login;
-			cin >> login;
-			Employee::employee[i].setLogin(login);
-
-			cout << "Пароль: ";
-			string password;
-			cin >> password;
-			Employee::employee[i].setPassword(password);
-
-			cout << endl;
+			Employee newEmployee;
+			std::cin >> newEmployee;
+			Employee::employee[i] = newEmployee;
+			std::cout << std::endl;
 		}
 		std::ofstream fout("Employee.txt", std::ofstream::app);
 		for (int i = 0; i < Employee::countEmployee; i++)
@@ -270,39 +300,15 @@ namespace GEV
 
 	void createDataBaseAstronauts()
 	{
-		cout << "Склько астронавтов вы хотите ввести: ";
-		cin >> Astronaut::countAstronauts;
+		std::cout << "Склько астронавтов вы хотите ввести: ";
+		std::cin >> Astronaut::countAstronauts;
 		Astronaut::astronauts = new Astronaut[Astronaut::countAstronauts];
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
 		{
-			cout << "Имя: ";
-			string name;
-			cin >> name;
-			Astronaut::astronauts[i].setName(name);
-
-			cout << "Фамилия: ";
-			string surname;
-			cin >> surname;
-			Astronaut::astronauts[i].setSurname(surname);
-
-			cout << "Возраст: ";
-			int age;
-			cin >> age;
-			Astronaut::astronauts[i].setAge(age);
-
-			Astronaut::astronauts[i].setSpaceSuit();
-
-			cout << "Логин: ";
-			string login;
-			cin >> login;
-			Astronaut::astronauts[i].setLogin(login);
-
-			cout << "Пароль: ";
-			string password;
-			cin >> password;
-			Astronaut::astronauts[i].setPassword(password);
-
-			cout << endl;
+			Astronaut newAstronaut;
+			std::cin >> newAstronaut;
+			Astronaut::astronauts[i] = newAstronaut;
+			std::cout << std::endl;
 		}
 		std::ofstream fout("Astronauts.txt", std::ofstream::app);
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
@@ -314,12 +320,12 @@ namespace GEV
 
 	void deleteInDataBaseEmployee()
 	{
-		cout << "Удаление сотрудника из базы данных." << endl << endl;
+		std::cout << "Удаление сотрудника из базы данных." << std::endl << std::endl;
 		Employee print;
 		print.print(Employee::employee, Employee::countEmployee);
-		cout << "Введите номер сотрудника, которого вы хотите удалить из базы данных: ";
+		std::cout << "Введите номер сотрудника, которого вы хотите удалить из базы данных: ";
 		int command = 0;
-		cin >> command;
+		std::cin >> command;
 		Employee::countEmployee--;
 		Employee* newEmployee = new Employee[Employee::countEmployee];
 		int i = 0;
@@ -336,18 +342,18 @@ namespace GEV
 		delete[] Employee::employee;
 		Employee::employee = newEmployee;
 		system("cls");
-		cout << "Вы удалили одного сотрудника из базы данных." << endl;
+		std::cout << "Вы удалили одного сотрудника из базы данных." << std::endl;
 		system("pause");
 	}
 
 	void deleteInDataBaseAstronauts()
 	{
-		cout << "Удаление астронавта из базы данных." << endl << endl;
+		std::cout << "Удаление астронавта из базы данных." << std::endl << std::endl;
 		Astronaut print;
 		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
-		cout << "Введите номер астронавта, которого вы хотите удалить из базы данных: ";
+		std::cout << "Введите номер астронавта, которого вы хотите удалить из базы данных: ";
 		int command = 0;
-		cin >> command;
+		std::cin >> command;
 		Astronaut::countAstronauts--;
 		Astronaut* newAstronauts = new Astronaut[Astronaut::countAstronauts];
 		int i = 0;
@@ -364,7 +370,7 @@ namespace GEV
 		delete[] Astronaut::astronauts;
 		Astronaut::astronauts = newAstronauts;
 		system("cls");
-		cout << "Вы удалили одного астронавта из базы данных." << endl;
+		std::cout << "Вы удалили одного астронавта из базы данных." << std::endl;
 		system("pause");
 	}
 
@@ -380,7 +386,7 @@ namespace GEV
 
 	void sortUpEmployee()
 	{
-		cout << "Сортировка базы данных сотрудников по возрастанию возраста:" << endl << endl;
+		std::cout << "Сортировка базы данных сотрудников по возрастанию возраста:" << std::endl << std::endl;
 		for (int i = 1; i < Employee::countEmployee; i++)
 		{
 			for (int j = 0; j < (Employee::countEmployee - 1); j++)
@@ -399,7 +405,7 @@ namespace GEV
 
 	void sortDownEmployee()
 	{
-		cout << "Сортировка базы данных сотрудников по убыванию возраста:" << endl << endl;
+		std::cout << "Сортировка базы данных сотрудников по убыванию возраста:" << std::endl << std::endl;
 		for (int i = 1; i < Employee::countEmployee; i++)
 		{
 			for (int j = 0; j < (Employee::countEmployee - 1); j++)
@@ -418,7 +424,7 @@ namespace GEV
 
 	void sortUpAstronauts()
 	{
-		cout << "Сортировка базы данных астронавтов по возрастанию возраста:" << endl << endl;
+		std::cout << "Сортировка базы данных астронавтов по возрастанию возраста:" << std::endl << std::endl;
 		for (int i = 1; i < Astronaut::countAstronauts; i++)
 		{
 			for (int j = 0; j < (Astronaut::countAstronauts - 1); j++)
@@ -436,7 +442,7 @@ namespace GEV
 	}
 	void sortDownAstronauts()
 	{
-		cout << "Сортировка базы данных астронавтов по убыванию возраста:" << endl << endl;
+		std::cout << "Сортировка базы данных астронавтов по убыванию возраста:" << std::endl << std::endl;
 		for (int i = 1; i < Astronaut::countAstronauts; i++)
 		{
 			for (int j = 0; j < (Astronaut::countAstronauts - 1); j++)
@@ -452,27 +458,186 @@ namespace GEV
 		Astronaut print;
 		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
 	}
-	void filtrUpEmployee()
-	{
 
-	}
-	void filtrDownEmployee()
+	void filtrEmployeeSpaceSuitS1()
 	{
-
+		std::cout << "База данных сотрудников отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Employee::countEmployee; i++)
+		{
+			if (getSpaceSuit(Employee::employee[i]) == S1)
+			{
+				std::string spaceSuit = "S1";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
-	void filtrUpAstronauts()
+
+	void filtrAstronautsSpaceSuitS1()
 	{
-
+		std::cout << "База данных астронавтов отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Astronaut::countAstronauts; i++)
+		{
+			if (getSpaceSuit(Astronaut::astronauts[i]) == S1)
+			{
+				std::string spaceSuit = "S1";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
-	void filtrDownAstronauts()
+
+	void filtrEmployeeSpaceSuitS2()
 	{
-
+		std::cout << "База данных сотрудников отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Employee::countEmployee; i++)
+		{
+			if (getSpaceSuit(Employee::employee[i]) == S2)
+			{
+				std::string spaceSuit = "S2";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
+
+	void filtrAstronautsSpaceSuitS2()
+	{
+		std::cout << "База данных астронавтов отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Astronaut::countAstronauts; i++)
+		{
+			if (getSpaceSuit(Astronaut::astronauts[i]) == S2)
+			{
+				std::string spaceSuit = "S2";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrEmployeeSpaceSuitS3()
+	{
+		std::cout << "База данных сотрудников отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Employee::countEmployee; i++)
+		{
+			if (getSpaceSuit(Employee::employee[i]) == S3)
+			{
+				std::string spaceSuit = "S3";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrAstronautsSpaceSuitS3()
+	{
+		std::cout << "База данных астронавтов отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Astronaut::countAstronauts; i++)
+		{
+			if (getSpaceSuit(Astronaut::astronauts[i]) == S3)
+			{
+				std::string spaceSuit = "S3";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrEmployeeSpaceSuitS4()
+	{
+		std::cout << "База данных сотрудников отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Employee::countEmployee; i++)
+		{
+			if (getSpaceSuit(Employee::employee[i]) == S4)
+			{
+				std::string spaceSuit = "S4";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrAstronautsSpaceSuitS4()
+	{
+		std::cout << "База данных астронавтов отфильтрованная:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < Astronaut::countAstronauts; i++)
+		{
+			if (getSpaceSuit(Astronaut::astronauts[i]) == S4)
+			{
+				std::string spaceSuit = "S4";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	std::string getName(Human& human)
+	{
+		return human.name;
+	}
+
+	std::string getSurname(Human& human)
+	{
+		return human.surname;
+	}
+
+	int getAge(Human& human)
+	{
+		return human.age;
+	}
+
+	std::string getLogin(Human& human)
+	{
+		return human.login;
+	}
+
+	std::string getPassword(Human& human)
+	{
+		return human.password;
+	}
+
+	SpaceSuit getSpaceSuit(Human& human)
+	{
+		return human.spaceSuit;
+	}
+
 	void addEmployee()
 	{
-		cout << "Сколько вы хотите добавить сотрудников: ";
+		std::cout << "Сколько вы хотите добавить сотрудников: ";
 		int count = 0;
-		cin >> count;
+		std::cin >> count;
 		Employee::countEmployee += count;
 		Employee* newEmployee = new Employee[Employee::countEmployee];
 		for (int i = 0; i < (Employee::countEmployee - count); i++)
@@ -481,16 +646,17 @@ namespace GEV
 		}
 		for (int i = 0; i < count; i++)
 		{
-			cin >> newEmployee[i+Employee::countEmployee-count];
+			std::cin >> newEmployee[i+Employee::countEmployee-count];
 		}
 		delete[] Employee::employee;
 		Employee::employee = newEmployee;
 	}
+
 	void addAstronauts()
 	{
-		cout << "Сколько вы хотите добавить астронавтов: ";
+		std::cout << "Сколько вы хотите добавить астронавтов: ";
 		int count = 0;
-		cin >> count;
+		std::cin >> count;
 		Astronaut::countAstronauts += count;
 		Astronaut* newAstronauts = new Astronaut[Astronaut::countAstronauts];
 		for (int i = 0; i < (Astronaut::countAstronauts - count); i++)
@@ -499,7 +665,7 @@ namespace GEV
 		}
 		for (int i = 0; i < count; i++)
 		{
-			cin >> newAstronauts[i + Astronaut::countAstronauts - count];
+			std::cin >> newAstronauts[i + Astronaut::countAstronauts - count];
 		}
 		delete[] Astronaut::astronauts;
 		Astronaut::astronauts = newAstronauts;
@@ -509,6 +675,7 @@ namespace GEV
 		Employee print;
 		print.print(Employee::employee, Employee::countEmployee);
 	}
+
 	void printAstronauts()
 	{
 		Astronaut print;

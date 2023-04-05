@@ -29,12 +29,22 @@ namespace GEV
 	void sortDownEmployee();
 	void sortUpAstronauts();
 	void sortDownAstronauts();
-	void filtrUpEmployee();
-	void filtrDownEmployee();
-	void filtrUpAstronauts();
-	void filtrDownAstronauts();
+	void filtrEmployeeSpaceSuitS1();
+	void filtrAstronautsSpaceSuitS1();
+	void filtrEmployeeSpaceSuitS2();
+	void filtrAstronautsSpaceSuitS2();
+	void filtrEmployeeSpaceSuitS3();
+	void filtrAstronautsSpaceSuitS3();
+	void filtrEmployeeSpaceSuitS4();
+	void filtrAstronautsSpaceSuitS4();
 	void addEmployee();
 	void addAstronauts();
 	void printEmployee();
 	void printAstronauts();
+	std::string getName(Human& human);
+	std::string getSurname(Human& human);
+	int getAge(Human& human);
+	std::string getLogin(Human& human);
+	std::string getPassword(Human& human);
+	SpaceSuit getSpaceSuit(Human& human);
 }

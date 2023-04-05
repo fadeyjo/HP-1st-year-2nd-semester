@@ -2,16 +2,12 @@
 
 namespace GEV
 {
-	void Astronaut::setSpaceSuit()
-	{
-		this->spaceSuit = S2;
-	}
 	void Astronaut::print(Human* human, int count)
 	{
-		cout << "База данных астронавтов:" << endl;
-		cout << "----------------------------------------------------------------------------------------------------------------" << endl;
-		cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << endl;
-		cout << "----------------------------------------------------------------------------------------------------------------" << endl;
+		std::cout << "База данных астронавтов:" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя        |        Фамилия        |        Возраст        |        Скафандр        |" << std::endl;
+		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < countAstronauts; i++)
 		{
 			std::string spaceSuit;
@@ -23,8 +19,8 @@ namespace GEV
 			{
 				spaceSuit = "S2";
 			}
-			cout << "|" << setw(9) << i+1 << setw(9) << "|" << setw(10) << astronauts[i].getName() << setw(10)  << "|" << setw(12) << astronauts[i].getSurname() << setw(12) << "|" << setw(12) << astronauts[i].getAge() << setw(12) << "|" << setw(13) << spaceSuit << setw(12) << "|" << endl;
-			cout << "----------------------------------------------------------------------------------------------------------------" << endl;
+			std::cout << "|" << std::setw(9) << i+1 << std::setw(9) << "|" << std::setw(10) << astronauts[i].getName() << std::setw(10)  << "|" << std::setw(12) << astronauts[i].getSurname() << std::setw(12) << "|" << std::setw(12) << astronauts[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+			std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		}
 		system("pause");
 	}
