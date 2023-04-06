@@ -16,6 +16,10 @@ int Astronaut::countAstronauts;
 int Employee::countEmployee;
 Astronaut* Astronaut::astronauts;
 Employee* Employee::employee;
+CargoSpaceShip* CargoSpaceShip::cargoSpaceShips;
+HighSpeedSpaceShip* HighSpeedSpaceShip::highSpeedSpaceShips;
+int CargoSpaceShip::countCargoSpaceShips;
+int HighSpeedSpaceShip::countHighSpeedSpaceShips;
 
 int main()
 {

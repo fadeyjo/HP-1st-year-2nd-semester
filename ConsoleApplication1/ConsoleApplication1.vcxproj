@@ -128,18 +128,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Astronaut.cpp" />
+    <ClCompile Include="CargoSpaceShip.cpp" />
     <ClCompile Include="ConsoleApplication1.cpp" />
     <ClCompile Include="Employee.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="HighSpeedSpaceShip.cpp" />
     <ClCompile Include="Human.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="SpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Astronaut.h" />
+    <ClInclude Include="CargoSpaceShip.h" />
     <ClInclude Include="Employee.h" />
     <ClInclude Include="Functions.h" />
+    <ClInclude Include="HighSpeedSpaceShip.h" />
     <ClInclude Include="Human.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="SpaceShip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -6,10 +6,18 @@
 #include "Employee.h"
 #include "Astronaut.h"
 #include "Human.h"
+#include "SpaceShip.h"
 #include <iostream>
+#include "CargoSpaceShip.h"
+#include "HighSpeedSpaceShip.h"
+
 
 namespace GEV
 {
+	void createDataBaseHighSpeedSpaceShips();
+	void createDataBaseCargoSpaceShips();
+	std::ostream& operator<<(std::ostream& out, const SpaceShip& spaceShip);
+	std::istream& operator>>(std::istream& in, SpaceShip& spaceShip);
 	std::ostream& operator<<(std::ostream& out, const Human* human);
 	std::istream& operator>>(std::istream& in, Human& human);
 	bool operator>(const Human& human1, const Human& human2);

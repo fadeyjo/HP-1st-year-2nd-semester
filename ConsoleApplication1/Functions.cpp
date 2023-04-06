@@ -2,6 +2,128 @@
 
 namespace GEV
 {
+	void createDataBaseCargoSpaceShips()
+	{
+		std::cout << "Сколько грузовых космических кораблей вы хотите ввести: ";
+		std::cin >> CargoSpaceShip::countCargoSpaceShips;
+		CargoSpaceShip::cargoSpaceShips = new CargoSpaceShip[CargoSpaceShip::countCargoSpaceShips];
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			CargoSpaceShip newCargoSpaceShip;
+			std::cin >> newCargoSpaceShip;
+			CargoSpaceShip::cargoSpaceShips[i] = newCargoSpaceShip;
+			std::cout << std::endl;
+		}
+		std::ofstream fout("CargoSpaceShips.txt", std::ofstream::app);
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			fout << CargoSpaceShip::cargoSpaceShips[i];
+		}
+		fout.close();
+	}
+
+	void createDataBaseHighSpeedSpaceShips()
+	{
+		std::cout << "Сколько астронавтов вы хотите ввести: ";
+		std::cin >> HighSpeedSpaceShip::countHighSpeedSpaceShips;
+		HighSpeedSpaceShip::highSpeedSpaceShips = new HighSpeedSpaceShip[HighSpeedSpaceShip::countHighSpeedSpaceShips];
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			HighSpeedSpaceShip newHighSpeedSpaceShip;
+			std::cin >> newHighSpeedSpaceShip;
+			HighSpeedSpaceShip::highSpeedSpaceShips[i] = newHighSpeedSpaceShip;
+			std::cout << std::endl;
+		}
+		std::ofstream fout("HighSpeedSpaceShips.txt", std::ofstream::app);
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			fout << HighSpeedSpaceShip::highSpeedSpaceShips[i];
+		}
+		fout.close();
+	}
+
+	std::ostream& operator<<(std::ostream& out, const SpaceShip& spaceShip)
+	{
+		std::string condition;
+		switch (spaceShip.condition)
+		{
+		case readyToLunch:
+		{
+			condition = "Готов к вылету";
+			break;
+		}
+		case broken:
+		{
+			condition = "Сломан";
+			break;
+		}
+		case repair:
+		{
+			condition = "Ремонтируется";
+			break;
+		}
+		default:
+		{
+			condition = "Вылет запланирован";
+			break;
+		}
+		}
+		out <<  "Название: " << spaceShip.name << std::endl << "Масса : " << spaceShip.weight << std::endl << std::endl << "Состояние: " << condition << std::endl << std::endl << "Информация о пилоте: " << spaceShip.pilot;
+		return out;
+	}
+	std::istream& operator>>(std::istream& in, SpaceShip& spaceShip)
+	{
+		std::cout << "Название корабля: ";
+		in >> spaceShip.name;
+		std::cout << std::endl;
+		std::cout << "Масса: ";
+		in >> spaceShip.weight;
+		std::cout << std::endl;
+		std::cout << "Выберите текущее состояние корабля. Возможные варианты:" << std::endl;
+		std::cout << "[1]    Запланировать вылет." << std::endl;
+		std::cout << "[2]    В ремонте." << std::endl;
+		std::cout << "[3]    Сломан." << std::endl;
+		std::cout << "[4]    Готов к вылету." << std::endl;
+		std::cout << "Текущее состояние: ";
+		int command = 0;
+		std::cin >> command;
+		switch (command)
+		{
+		case 1:
+		{
+			spaceShip.condition = launhPlanned;
+			std::cout << "Планировка вылета:" << std::endl;
+			std::cout << "Дата вылета (ДД.ММ.ГГГГ): ";
+			std::cin >> spaceShip.date;
+			std::cout << "Время вылета (например, 12:38): ";
+			std::cin >> spaceShip.time;
+			break;
+		}
+		case 2:
+		{
+			spaceShip.condition = repair;
+			break;
+		}
+		case 3:
+		{
+			spaceShip.condition = broken;
+			break;
+		}
+		default:
+		{
+			spaceShip.condition = readyToLunch;
+			break;
+		}
+		}
+		std::cout << "Выбор пилота. Возможные пилоты:" << std::endl;
+		Astronaut print;
+		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
+		std::cout << "Номер пилота: ";
+		std::cin >> command;
+		spaceShip.pilot = Astronaut::astronauts[command - 1];
+		return in;
+	}
+
 	bool operator>(const Human& human1, const Human& human2)
 	{
 		return human1.age > human2.age;
@@ -210,10 +332,12 @@ namespace GEV
 		int countAdminMenuItems = 8;
 		Menu** adminMenu = new Menu * [countAdminMenuItems];
 
-		int countCreateDataBaseMenuItems = 2;
+		int countCreateDataBaseMenuItems = 4;
 		Menu** createDataBaseMenu = new Menu * [countCreateDataBaseMenuItems];
 		createDataBaseMenu[0] = new Menu(createDataBaseEmployee, new char[255] {"[1]    Создание базы данных сотрудников."});
 		createDataBaseMenu[1] = new Menu(createDataBaseAstronauts, new char[255] {"[2]    Создание базы данных астронавтов."});
+		createDataBaseMenu[2] = new Menu(createDataBaseCargoSpaceShips, new char[255] {"[3]    Создание базы данных грузовых кораблей."});
+		createDataBaseMenu[3] = new Menu(createDataBaseHighSpeedSpaceShips, new char[255] {"[4]    Создание базы данных высокоскоростных кораблей."});
 		adminMenu[0] = new Menu(createDataBaseMenu, new char[255] {"[1]    Создание баз данных."}, countCreateDataBaseMenuItems);
 
 		int countDeleteMenuItems = 2;
@@ -376,12 +500,38 @@ namespace GEV
 
 	void redactDataBaseEmployee()
 	{
-
+		std::cout << "Редактирование базы данных сотрудников." << std::endl << std::endl;
+		Employee print;
+		print.print(Employee::employee, Employee::countEmployee);
+		std::cout << "Введите номер сотрудника, которого вы хотите отредактировать: ";
+		int command = 0;
+		std::cin >> command;
+		system("cls");
+		std::cout << "Старые данные:" << std::endl;
+		std::cout << Employee::employee[command - 1] << std::endl;
+		std::cout << "Введите новые данные:" << std::endl;
+		Employee newEmployee;
+		std::cin >> newEmployee;
+		Employee::employee[command - 1] = newEmployee;
+		system("pause");
 	}
 
 	void redactDataBaseAstronauts()
 	{
-
+		std::cout << "Редактирование базы данных астронавтов." << std::endl << std::endl;
+		Astronaut print;
+		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
+		std::cout << "Введите номер сотрудника, которого вы хотите отредактировать: ";
+		int command = 0;
+		std::cin >> command;
+		system("cls");
+		std::cout << "Старые данные:" << std::endl;
+		std::cout << Astronaut::astronauts[command - 1] << std::endl;
+		std::cout << "Введите новые данные:" << std::endl;
+		Astronaut newAstronaut;
+		std::cin >> newAstronaut;
+		Astronaut::astronauts[command - 1] = newAstronaut;
+		system("pause");
 	}
 
 	void sortUpEmployee()
