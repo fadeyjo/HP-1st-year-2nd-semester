@@ -121,7 +121,7 @@ namespace GEV
 				}
 				break;
 			}
-			default:
+			case 8:
 			{
 				if (menu[7]->isSubMenu)
 				{
@@ -130,6 +130,18 @@ namespace GEV
 				else
 				{
 					menu[7]->action();
+				}
+				break;
+			}
+			default:
+			{
+				if (menu[8]->isSubMenu)
+				{
+					runSubMenu(menu[8]->subMenu, menu[8]->countSubMenuItems);
+				}
+				else
+				{
+					menu[8]->action();
 				}
 				break;
 			}

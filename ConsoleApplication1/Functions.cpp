@@ -343,7 +343,7 @@ namespace GEV
 
 	void createAdminMenu()
 	{
-		int countAdminMenuItems = 8;
+		int countAdminMenuItems = 9;
 		Menu** adminMenu = new Menu * [countAdminMenuItems];
 
 		int countCreateDataBaseMenuItems = 4;
@@ -448,6 +448,12 @@ namespace GEV
 		printMenu[2] = new Menu(printCargo, new char[255] {"[3]    Вывод базы данных грузовых кораблей."});
 		printMenu[3] = new Menu(printHighSpeed, new char[255] {"[4]    Вывод базы данных высокоскоростных кораблей."});
 		adminMenu[7] = new Menu(printMenu, new char[255] {"[8]    Вывод баз данных."}, countPrintMenuItems);
+		
+		int countMaxPropertyMenuItems = 2;
+		Menu** maxPropertyMenu = new Menu * [countMaxPropertyMenuItems];
+		maxPropertyMenu[0] = new Menu(maxPropertyCargo, new char[255] {"[1]    Просмотр доступного корабля с максимальной массой перевозки груза."});
+		maxPropertyMenu[1] = new Menu(maxPropertyHighSpeed, new char[255] {"[2]    Просмотр доступного корабля с максимальной массой скоростного полёта."});
+		adminMenu[8] = new Menu(maxPropertyMenu, new char[255] {"[9]    Самые лучшие корабли из категорий."}, countMaxPropertyMenuItems);
 
 		Menu::countLastMenuItems = countAdminMenuItems;
 		Menu::lastMenu = adminMenu;
@@ -464,6 +470,36 @@ namespace GEV
 
 		Menu::countLastMenuItems = countUserMenuItems;
 		Menu::lastMenu = userMenu;
+	}
+
+	template<typename T>
+	T maxWeigth(T* base, int count)
+	{
+		T max = base[0];
+		for (int i = 1; i < count; i++)
+		{
+			if (base[i] > max)
+			{
+				max = base[i];
+			}
+		}
+		return max;
+	}
+
+	void maxPropertyCargo()
+	{
+		CargoSpaceShip cargoSpaceShip = maxWeigth<CargoSpaceShip>(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+		std::cout << "Самый тяжёлый грузовой корабль." << std::endl << std::endl;
+		std::cout << cargoSpaceShip;
+		system("pause");
+	}
+
+	void maxPropertyHighSpeed()
+	{
+		HighSpeedSpaceShip highSpeedSpaceShip = maxWeigth<HighSpeedSpaceShip>(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+		std::cout << "Самый тяжёлый высокоскоростной корабль." << std::endl << std::endl;
+		std::cout << highSpeedSpaceShip;
+		system("pause");
 	}
 
 	void writeTheAction()

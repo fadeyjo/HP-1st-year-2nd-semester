@@ -74,4 +74,10 @@ namespace GEV
 	void filtrHighSpeedRepair();
 	void addCargo();
 	void addHighSpeed();
+	void maxPropertyCargo();
+
+	 template<typename T>
+	 T maxWeigth(T* base, int count);
+
+	 void maxPropertyHighSpeed();
 }
