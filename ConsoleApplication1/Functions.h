@@ -10,6 +10,7 @@
 #include <iostream>
 #include "CargoSpaceShip.h"
 #include "HighSpeedSpaceShip.h"
+#include "Container.h"
 
 
 namespace GEV
@@ -27,6 +28,8 @@ namespace GEV
 	void registrationAsAdmin();
 	void registrationAsUser();
 	void createAdminMenu();
+	void createUserMenu();
+	void writeTheAction();
 	void createDataBaseEmployee();
 	void createDataBaseAstronauts();
 	void deleteInDataBaseEmployee();
@@ -49,10 +52,26 @@ namespace GEV
 	void addAstronauts();
 	void printEmployee();
 	void printAstronauts();
-	std::string getName(Human& human);
-	std::string getSurname(Human& human);
-	int getAge(Human& human);
-	std::string getLogin(Human& human);
-	std::string getPassword(Human& human);
-	SpaceSuit getSpaceSuit(Human& human);
+	void deleteInDataBaseCargo();
+	void deleteInDataBaseHighSpeed();
+	void redactDataBaseCargo();
+	void redactDataBaseHighSpeed();
+	void sortUpCargo();
+	void sortDownCargo();
+	void sortUpHighSpeed();
+	void sortDownHighSpeed();
+	bool operator>(const SpaceShip& spaceShip1, const SpaceShip& spaceShip2);
+	bool operator<(const SpaceShip& spaceShip1, const SpaceShip& spaceShip2);
+	void printHighSpeed();
+	void printCargo();
+	void filtrCargoReadyToLaunch();
+	void filtrCargoBroken();
+	void filtrCargoLaunchPlanned();
+	void filtrCargoRepair();
+	void filtrHighSpeedReadyToLaunch();
+	void filtrHighSpeedBroken();
+	void filtrHighSpeedLaunchPlanned();
+	void filtrHighSpeedRepair();
+	void addCargo();
+	void addHighSpeed();
 }

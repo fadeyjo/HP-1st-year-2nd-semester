@@ -21,14 +21,10 @@ namespace GEV
 		std::string getName();
 		std::string getSurname();
 		int getAge();
+		std::string getLogin();
+		std::string getPassword();
 		SpaceSuit getSpaceSuit();
 		virtual void print(Human* human, int count) = 0;
-		friend std::string getName(Human& human);
-		friend std::string getSurname(Human& human);
-		friend int getAge(Human& human);
-		friend std::string getLogin(Human& human);
-		friend std::string getPassword(Human& human);
-		friend SpaceSuit getSpaceSuit(Human& human);
 		friend std::ostream& operator<<(std::ostream& out, const Human& human);
 		friend std::istream& operator>>(std::istream& in, Human& human);
 		friend bool operator>(const Human& human1, const Human& human2);

@@ -4,7 +4,7 @@ namespace GEV
 {
 	void createDataBaseCargoSpaceShips()
 	{
-		std::cout << "Сколько грузовых космических кораблей вы хотите ввести: ";
+		std::cout << "Сколько грузовых кораблей вы хотите ввести: ";
 		std::cin >> CargoSpaceShip::countCargoSpaceShips;
 		CargoSpaceShip::cargoSpaceShips = new CargoSpaceShip[CargoSpaceShip::countCargoSpaceShips];
 		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
@@ -24,7 +24,7 @@ namespace GEV
 
 	void createDataBaseHighSpeedSpaceShips()
 	{
-		std::cout << "Сколько астронавтов вы хотите ввести: ";
+		std::cout << "Сколько высокоскоростных кораблей вы хотите ввести: ";
 		std::cin >> HighSpeedSpaceShip::countHighSpeedSpaceShips;
 		HighSpeedSpaceShip::highSpeedSpaceShips = new HighSpeedSpaceShip[HighSpeedSpaceShip::countHighSpeedSpaceShips];
 		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
@@ -68,7 +68,7 @@ namespace GEV
 			break;
 		}
 		}
-		out <<  "Название: " << spaceShip.name << std::endl << "Масса : " << spaceShip.weight << std::endl << std::endl << "Состояние: " << condition << std::endl << std::endl << "Информация о пилоте: " << spaceShip.pilot;
+		out <<  "Название: " << spaceShip.name << std::endl << "Масса : " << spaceShip.weight << std::endl << "Состояние: " << condition << std::endl << std::endl << "Информация о пилоте: " << spaceShip.pilot;
 		return out;
 	}
 	std::istream& operator>>(std::istream& in, SpaceShip& spaceShip)
@@ -102,15 +102,28 @@ namespace GEV
 		case 2:
 		{
 			spaceShip.condition = repair;
+			spaceShip.date = "";
+			spaceShip.time = "";
 			break;
 		}
 		case 3:
 		{
 			spaceShip.condition = broken;
+			spaceShip.date = "";
+			spaceShip.time = "";
 			break;
 		}
 		default:
 		{
+			std::string day = std::to_string(rand() %  31 + 1);
+			std::string month = std::to_string(rand() % 12 + 1);
+			std::string year = std::to_string(rand() % 1001 + 2024);
+			std::string hour = std::to_string(rand() % 24+1);
+			std::string minutes = std::to_string(rand() % 61);
+			std::string date = day + '.' + month + '.' + year;
+			std::string time = hour + ':' + minutes;
+			spaceShip.date = date;
+			spaceShip.time = time;
 			spaceShip.condition = readyToLunch;
 			break;
 		}
@@ -284,7 +297,8 @@ namespace GEV
 				std::cout << "Вы зашли как пользователь." << std::endl;
 				system("pause");
 				system("cls");
-
+				createUserMenu();
+				Menu::runMenu(Menu::lastMenu, Menu::countLastMenuItems);
 			}
 		}
 	}
@@ -340,19 +354,24 @@ namespace GEV
 		createDataBaseMenu[3] = new Menu(createDataBaseHighSpeedSpaceShips, new char[255] {"[4]    Создание базы данных высокоскоростных кораблей."});
 		adminMenu[0] = new Menu(createDataBaseMenu, new char[255] {"[1]    Создание баз данных."}, countCreateDataBaseMenuItems);
 
-		int countDeleteMenuItems = 2;
+		int countDeleteMenuItems = 4;
 		Menu** deleteMenu = new Menu * [countDeleteMenuItems];
 		deleteMenu[0] = new Menu(deleteInDataBaseEmployee, new char[255] {"[1]    Удаление из базы данных сотрудников."});
 		deleteMenu[1] = new Menu(deleteInDataBaseAstronauts, new char[255] {"[2]    Удаление из базы данных астронавтов."});
+		deleteMenu[2] = new Menu(deleteInDataBaseCargo, new char[255] {"[3]    Удаление из базы данных грузовых кораблей."});
+		deleteMenu[3] = new Menu(deleteInDataBaseHighSpeed, new char[255] {"[4]    Удаление из базы данных высокоскоростных кораблей."});
 		adminMenu[1] = new Menu(deleteMenu, new char[255] {"[2]    Удаление из баз данных."}, countDeleteMenuItems);
 
-		int countRedactMenuItems = 2;
+		int countRedactMenuItems = 4;
 		Menu** redactMenu = new Menu * [countRedactMenuItems];
 		redactMenu[0] = new Menu(redactDataBaseEmployee, new char[255] {"[1]    Редактирование базы данных сотрудников."});
 		redactMenu[1] = new Menu(redactDataBaseAstronauts, new char[255] {"[2]    Редактирование базы данных астронавтов."});
+		redactMenu[2] = new Menu(redactDataBaseCargo, new char[255] {"[3]    Редактирование базы данных грузовых кораблей."});
+		redactMenu[3] = new Menu(redactDataBaseHighSpeed, new char[255] {"[4]    Редактирование базы данных высокоскоростных кораблей."});
+
 		adminMenu[2] = new Menu(redactMenu, new char[255] {"[3]    Редактирование баз данных."}, countRedactMenuItems);
 
-		int countSortMenuItems = 2;
+		int countSortMenuItems = 4;
 		Menu** sortMenu = new Menu * [countSortMenuItems];
 		int countSortEmployeeMenuItems = 2;
 		Menu** sortEmployeeMenu = new Menu * [countSortEmployeeMenuItems];
@@ -364,9 +383,19 @@ namespace GEV
 		sortAstronautsMenu[0] = new Menu(sortUpAstronauts, new char[255] {"[1]    Сортировка по возрастанию."});
 		sortAstronautsMenu[1] = new Menu(sortDownAstronauts, new char[255] {"[2]    Сортировка по убыванию."});
 		sortMenu[1] = new Menu(sortAstronautsMenu, new char[255] {"[2]    Сортировка базы данных астронавтов."}, countSortAstronautsMenuItems);
+		int countSortCargoMenuItems = 2;
+		Menu** sortCargoMenu = new Menu * [countSortCargoMenuItems];
+		sortCargoMenu[0] = new Menu(sortUpCargo, new char[255] {"[1]    Сортировка по возрастанию."});
+		sortCargoMenu[1] = new Menu(sortDownCargo, new char[255] {"[2]    Сортировка по убыванию."});
+		sortMenu[2] = new Menu(sortCargoMenu, new char[255] {"[3]    Сортировка базы данных грузовых кораблей."}, countSortCargoMenuItems);
+		int countSortHighSpeedMenuItems = 2;
+		Menu** sortHighSpeedMenu = new Menu * [countSortHighSpeedMenuItems];
+		sortHighSpeedMenu[0] = new Menu(sortUpHighSpeed, new char[255] {"[1]    Сортировка по возрастанию."});
+		sortHighSpeedMenu[1] = new Menu(sortDownHighSpeed, new char[255] {"[2]    Сортировка по убыванию."});
+		sortMenu[3] = new Menu(sortHighSpeedMenu, new char[255] {"[3]    Сортировка базы данных высокоскоростных кораблей."}, countSortHighSpeedMenuItems);
 		adminMenu[3] = new Menu(sortMenu, new char[255] {"[4]    Сортировка баз данных."}, countSortMenuItems);
 
-		int countFiltrMenuItems = 2;
+		int countFiltrMenuItems = 4;
 		Menu** filtrMenu = new Menu * [countFiltrMenuItems];
 		int countFiltrEmployeeMenuItems = 4;
 		Menu** filtrEmployeeMenu = new Menu * [countFiltrEmployeeMenuItems];
@@ -375,31 +404,83 @@ namespace GEV
 		filtrEmployeeMenu[2] = new Menu(filtrEmployeeSpaceSuitS3, new char[255] {"[3]    Фильтрация сотрудников по скафандру типа S3."});
 		filtrEmployeeMenu[3] = new Menu(filtrEmployeeSpaceSuitS4, new char[255] {"[4]    Фильтрация сотрудников по скафандру типа S4."});
 		filtrMenu[0] = new Menu(filtrEmployeeMenu, new char[255] {"[1]    Фильтрация базы данных сотрудников по скафандру."}, countFiltrEmployeeMenuItems);
+		
 		int countFiltrAstronautsMenuItems = 4;
 		Menu** filtrAstronautsMenu = new Menu * [countFiltrAstronautsMenuItems];
 		filtrAstronautsMenu[0] = new Menu(filtrAstronautsSpaceSuitS1, new char[255] {"[1]    Фильтрация астронавтов по скафандру типа S1."});
 		filtrAstronautsMenu[1] = new Menu(filtrAstronautsSpaceSuitS2, new char[255] {"[2]    Фильтрация астронавтов по скафандру типа S2."});
 		filtrAstronautsMenu[2] = new Menu(filtrAstronautsSpaceSuitS3, new char[255] {"[3]    Фильтрация астронавтов по скафандру типа S3."});
 		filtrAstronautsMenu[3] = new Menu(filtrAstronautsSpaceSuitS4, new char[255] {"[4]    Фильтрация астронавтов по скафандру типа S4."});
-		filtrMenu[1] = new Menu(filtrAstronautsMenu, new char[255] {"[1]    Фильтрация базы данных сотрудников по скафандру."}, countFiltrAstronautsMenuItems);
+		filtrMenu[1] = new Menu(filtrAstronautsMenu, new char[255] {"[2]    Фильтрация базы данных астронавтов по скафандру."}, countFiltrAstronautsMenuItems);
+		
+		int countFiltrCargoMenuItems = 4;
+		Menu** filtrCargoMenu = new Menu * [countFiltrCargoMenuItems];
+		filtrCargoMenu[0] = new Menu(filtrCargoReadyToLaunch, new char[255] {"[1]    Фильтрация грузовых кораблей, готовых к вылету."});
+		filtrCargoMenu[1] = new Menu(filtrCargoBroken, new char[255] {"[2]    Фильтрация сломанных грузовых кораблей."});
+		filtrCargoMenu[2] = new Menu(filtrCargoLaunchPlanned, new char[255] {"[3]    Фильтрация грузовых кораблей, у которых можно запланировать запуск."});
+		filtrCargoMenu[3] = new Menu(filtrCargoRepair, new char[255] {"[4]    Фильтрация грузовых кораблей, находящихся в ремонте."});
+		filtrMenu[2] = new Menu(filtrCargoMenu, new char[255] {"[3]    Фильтрация базы данных грузовых кораблей."}, countFiltrCargoMenuItems);
+		
+		int countFiltrHighSpeedMenuItems = 4;
+		Menu** filtrHighSpeedMenu = new Menu * [countFiltrHighSpeedMenuItems];
+		filtrHighSpeedMenu[0] = new Menu(filtrHighSpeedReadyToLaunch, new char[255] {"[1]    Фильтрация высокоскоростных кораблей, готовых к вылету."});
+		filtrHighSpeedMenu[1] = new Menu(filtrHighSpeedBroken, new char[255] {"[2]    Фильтрация сломанных высокоскоростных кораблей."});
+		filtrHighSpeedMenu[2] = new Menu(filtrHighSpeedLaunchPlanned, new char[255] {"[3]    Фильтрация высокоскоростных кораблей, у которых можно запланировать запуск."});
+		filtrHighSpeedMenu[3] = new Menu(filtrHighSpeedRepair, new char[255] {"[4]    Фильтрация высокоскоростных кораблей, находящихся в ремонте."});
+		filtrMenu[3] = new Menu(filtrHighSpeedMenu, new char[255] {"[4]    Фильтрация базы данных высокоскоростных кораблей."}, countFiltrHighSpeedMenuItems);
+		
 		adminMenu[4] = new Menu(filtrMenu, new char[255] {"[5]    Фильтрация баз данных."}, countFiltrMenuItems);
 
-		int countAddMenuItems = 2;
+		int countAddMenuItems = 4;
 		Menu** addMenu = new Menu * [countAddMenuItems];
 		addMenu[0] = new Menu(addEmployee, new char[255] {"[1]    Добавление в базу данных сотрудников."});
 		addMenu[1] = new Menu(addAstronauts, new char[255] {"[2]    Добавление в базу данных астронавтов."});
+		addMenu[2] = new Menu(addCargo, new char[255] {"[3]    Добавление в базу данных грузовых кораблей."});
+		addMenu[3] = new Menu(addHighSpeed, new char[255] {"[4]    Добавление в базу данных высокоскоростных кораблей."});
 		adminMenu[5] = new Menu(addMenu, new char[255] {"[6]    Добавление в базы данных."}, countAddMenuItems);
 
 		adminMenu[6] = new Menu(exit, new char[255] {"[7]    Выход."});
 
-		int countPrintMenuItems = 2;
+		int countPrintMenuItems = 4;
 		Menu** printMenu = new Menu * [countPrintMenuItems];
 		printMenu[0] = new Menu(printEmployee, new char[255] {"[1]    Вывод базы данных сотрудников."});
 		printMenu[1] = new Menu(printAstronauts, new char[255] {"[2]    Вывод базы данных астронавтов."});
+		printMenu[2] = new Menu(printCargo, new char[255] {"[3]    Вывод базы данных грузовых кораблей."});
+		printMenu[3] = new Menu(printHighSpeed, new char[255] {"[4]    Вывод базы данных высокоскоростных кораблей."});
 		adminMenu[7] = new Menu(printMenu, new char[255] {"[8]    Вывод баз данных."}, countPrintMenuItems);
 
 		Menu::countLastMenuItems = countAdminMenuItems;
 		Menu::lastMenu = adminMenu;
+	}
+
+	void createUserMenu()
+	{
+		int countUserMenuItems = 2;
+		Menu** userMenu = new Menu * [countUserMenuItems];
+		
+		userMenu[0] = new Menu(writeTheAction, new char[255] {"[1]    Запись действий в журнал."});
+
+		userMenu[1] = new Menu(exit, new char[255] {"[2]    Выход."});
+
+		Menu::countLastMenuItems = countUserMenuItems;
+		Menu::lastMenu = userMenu;
+	}
+
+	void writeTheAction()
+	{
+		Container records;
+		records.createRecords();
+		std::ofstream fout("Records.txt", std::ofstream::app);
+		int i = 1;
+		for (std::string str : records)
+		{
+			fout << "Запись " << i << ":" << std::endl << str << std::endl << std::endl;
+			i++;
+		}
+		fout.close();
+		std::cout << "Вы записали ваши действия в журнал." << std::endl;
+		system("pause");
+
 	}
 
 	void createDataBaseEmployee()
@@ -424,7 +505,7 @@ namespace GEV
 
 	void createDataBaseAstronauts()
 	{
-		std::cout << "Склько астронавтов вы хотите ввести: ";
+		std::cout << "Сколько астронавтов вы хотите ввести: ";
 		std::cin >> Astronaut::countAstronauts;
 		Astronaut::astronauts = new Astronaut[Astronaut::countAstronauts];
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
@@ -498,6 +579,62 @@ namespace GEV
 		system("pause");
 	}
 
+	void deleteInDataBaseCargo()
+	{
+		std::cout << "Удаление грузового корабля из базы данных." << std::endl << std::endl;
+		CargoSpaceShip print;
+		print.print(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+		std::cout << "Введите номер грузового корабля, которого вы хотите удалить из базы данных: ";
+		int command = 0;
+		std::cin >> command;
+		CargoSpaceShip::countCargoSpaceShips--;
+		CargoSpaceShip* newCargoSpaceShips = new CargoSpaceShip[CargoSpaceShip::countCargoSpaceShips];
+		int i = 0;
+		while (i != command - 1)
+		{
+			newCargoSpaceShips[i] = CargoSpaceShip::cargoSpaceShips[i];
+			i++;
+		}
+		while (i != CargoSpaceShip::countCargoSpaceShips)
+		{
+			newCargoSpaceShips[i] = CargoSpaceShip::cargoSpaceShips[i + 1];
+			i++;
+		}
+		delete[] CargoSpaceShip::cargoSpaceShips;
+		CargoSpaceShip::cargoSpaceShips = newCargoSpaceShips;
+		system("cls");
+		std::cout << "Вы удалили один грузовой корабль из базы данных." << std::endl;
+		system("pause");
+	}
+
+	void deleteInDataBaseHighSpeed()
+	{
+		std::cout << "Удаление высокоскоростного корабля из базы данных." << std::endl << std::endl;
+		HighSpeedSpaceShip print;
+		print.print(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+		std::cout << "Введите номер грузового корабля, которого вы хотите удалить из базы данных: ";
+		int command = 0;
+		std::cin >> command;
+		HighSpeedSpaceShip::countHighSpeedSpaceShips--;
+		HighSpeedSpaceShip* newHighSpeedSpaceShips = new HighSpeedSpaceShip[HighSpeedSpaceShip::countHighSpeedSpaceShips];
+		int i = 0;
+		while (i != command - 1)
+		{
+			newHighSpeedSpaceShips[i] = HighSpeedSpaceShip::highSpeedSpaceShips[i];
+			i++;
+		}
+		while (i != HighSpeedSpaceShip::countHighSpeedSpaceShips)
+		{
+			newHighSpeedSpaceShips[i] = HighSpeedSpaceShip::highSpeedSpaceShips[i + 1];
+			i++;
+		}
+		delete[] HighSpeedSpaceShip::highSpeedSpaceShips;
+		HighSpeedSpaceShip::highSpeedSpaceShips = newHighSpeedSpaceShips;
+		system("cls");
+		std::cout << "Вы удалили один высокоскоростной корабль корабль из базы данных." << std::endl;
+		system("pause");
+	}
+
 	void redactDataBaseEmployee()
 	{
 		std::cout << "Редактирование базы данных сотрудников." << std::endl << std::endl;
@@ -531,6 +668,42 @@ namespace GEV
 		Astronaut newAstronaut;
 		std::cin >> newAstronaut;
 		Astronaut::astronauts[command - 1] = newAstronaut;
+		system("pause");
+	}
+
+	void redactDataBaseCargo()
+	{
+		std::cout << "Редактирование базы данных грузовых кораблей." << std::endl << std::endl;
+		CargoSpaceShip print;
+		print.print(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+		std::cout << "Введите номер грузового корабля, который вы хотите отредактировать: ";
+		int command = 0;
+		std::cin >> command;
+		system("cls");
+		std::cout << "Старые данные:" << std::endl;
+		std::cout << CargoSpaceShip::cargoSpaceShips[command - 1] << std::endl;
+		std::cout << "Введите новые данные:" << std::endl;
+		CargoSpaceShip newCargoSpaceShip;
+		std::cin >> newCargoSpaceShip;
+		CargoSpaceShip::cargoSpaceShips[command - 1] = newCargoSpaceShip;
+		system("pause");
+	}
+
+	void redactDataBaseHighSpeed()
+	{
+		std::cout << "Редактирование базы данных высокоскоростных кораблей." << std::endl << std::endl;
+		HighSpeedSpaceShip print;
+		print.print(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+		std::cout << "Введите номер высокоскоростного корабля, который вы хотите отредактировать: ";
+		int command = 0;
+		std::cin >> command;
+		system("cls");
+		std::cout << "Старые данные:" << std::endl;
+		std::cout << HighSpeedSpaceShip::highSpeedSpaceShips[command - 1] << std::endl;
+		std::cout << "Введите новые данные:" << std::endl;
+		HighSpeedSpaceShip newHighSpeedSpaceShip;
+		std::cin >> newHighSpeedSpaceShip;
+		HighSpeedSpaceShip::highSpeedSpaceShips[command - 1] = newHighSpeedSpaceShip;
 		system("pause");
 	}
 
@@ -609,6 +782,92 @@ namespace GEV
 		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
 	}
 
+	void sortUpCargo()
+	{
+		std::cout << "Сортировка базы данных грузовых кораблей по возрастанию массы:" << std::endl << std::endl;
+		for (int i = 1; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			for (int j = 0; j < (CargoSpaceShip::countCargoSpaceShips - 1); j++)
+			{
+				if (CargoSpaceShip::cargoSpaceShips[j] > CargoSpaceShip::cargoSpaceShips[j + 1])
+				{
+					CargoSpaceShip bufAstronaut = CargoSpaceShip::cargoSpaceShips[j];
+					CargoSpaceShip::cargoSpaceShips[j] = CargoSpaceShip::cargoSpaceShips[j + 1];
+					CargoSpaceShip::cargoSpaceShips[j + 1] = bufAstronaut;
+				}
+			}
+		}
+		CargoSpaceShip print;
+		print.print(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+	}
+
+	void sortDownCargo()
+	{
+		std::cout << "Сортировка базы данных грузовых кораблей по убыванию массы:" << std::endl << std::endl;
+		for (int i = 1; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			for (int j = 0; j < (CargoSpaceShip::countCargoSpaceShips - 1); j++)
+			{
+				if (CargoSpaceShip::cargoSpaceShips[j] < CargoSpaceShip::cargoSpaceShips[j + 1])
+				{
+					CargoSpaceShip bufAstronaut = CargoSpaceShip::cargoSpaceShips[j];
+					CargoSpaceShip::cargoSpaceShips[j] = CargoSpaceShip::cargoSpaceShips[j + 1];
+					CargoSpaceShip::cargoSpaceShips[j + 1] = bufAstronaut;
+				}
+			}
+		}
+		CargoSpaceShip print;
+		print.print(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+	}
+
+	void sortUpHighSpeed()
+	{
+		std::cout << "Сортировка базы данных высокоскоростных кораблей по возрастанию массы:" << std::endl << std::endl;
+		for (int i = 1; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			for (int j = 0; j < (HighSpeedSpaceShip::countHighSpeedSpaceShips - 1); j++)
+			{
+				if (HighSpeedSpaceShip::highSpeedSpaceShips[j] > HighSpeedSpaceShip::highSpeedSpaceShips[j + 1])
+				{
+					HighSpeedSpaceShip bufAstronaut = HighSpeedSpaceShip::highSpeedSpaceShips[j];
+					HighSpeedSpaceShip::highSpeedSpaceShips[j] = HighSpeedSpaceShip::highSpeedSpaceShips[j + 1];
+					HighSpeedSpaceShip::highSpeedSpaceShips[j + 1] = bufAstronaut;
+				}
+			}
+		}
+		HighSpeedSpaceShip print;
+		print.print(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+	}
+
+	void sortDownHighSpeed()
+	{
+		std::cout << "Сортировка базы данных высокоскоростных кораблей по убыванию массы:" << std::endl << std::endl;
+		for (int i = 1; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			for (int j = 0; j < (HighSpeedSpaceShip::countHighSpeedSpaceShips - 1); j++)
+			{
+				if (HighSpeedSpaceShip::highSpeedSpaceShips[j] < HighSpeedSpaceShip::highSpeedSpaceShips[j + 1])
+				{
+					HighSpeedSpaceShip bufAstronaut = HighSpeedSpaceShip::highSpeedSpaceShips[j];
+					HighSpeedSpaceShip::highSpeedSpaceShips[j] = HighSpeedSpaceShip::highSpeedSpaceShips[j + 1];
+					HighSpeedSpaceShip::highSpeedSpaceShips[j + 1] = bufAstronaut;
+				}
+			}
+		}
+		HighSpeedSpaceShip print;
+		print.print(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+	}
+
+	bool operator>(const SpaceShip& spaceShip1, const SpaceShip& spaceShip2)
+	{
+		return spaceShip1.weight > spaceShip2.weight;
+	}
+
+	bool operator<(const SpaceShip& spaceShip1, const SpaceShip& spaceShip2)
+	{
+		return spaceShip1.weight < spaceShip2.weight;
+	}
+
 	void filtrEmployeeSpaceSuitS1()
 	{
 		std::cout << "База данных сотрудников отфильтрованная:" << std::endl;
@@ -617,10 +876,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Employee::countEmployee; i++)
 		{
-			if (getSpaceSuit(Employee::employee[i]) == S1)
+			if (Employee::employee[i].getSpaceSuit() == S1)
 			{
 				std::string spaceSuit = "S1";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) <<  Employee::employee[i].getName()/*getName(Employee::employee[i])*/ << std::setw(10) << "|" << std::setw(12) << Employee::employee[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Employee::employee[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -635,10 +894,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
 		{
-			if (getSpaceSuit(Astronaut::astronauts[i]) == S1)
+			if (Astronaut::astronauts[i].getSpaceSuit() == S1)
 			{
 				std::string spaceSuit = "S1";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Employee::employee[i].getName() << std::setw(10) << "|" << std::setw(12) << Employee::employee[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Employee::employee[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -653,10 +912,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Employee::countEmployee; i++)
 		{
-			if (getSpaceSuit(Employee::employee[i]) == S2)
+			if (Employee::employee[i].getSpaceSuit() == S2)
 			{
 				std::string spaceSuit = "S2";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Employee::employee[i].getName() << std::setw(10) << "|" << std::setw(12) << Employee::employee[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Employee::employee[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -671,10 +930,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
 		{
-			if (getSpaceSuit(Astronaut::astronauts[i]) == S2)
+			if (Astronaut::astronauts[i].getSpaceSuit() == S2)
 			{
 				std::string spaceSuit = "S2";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Astronaut::astronauts[i].getName() << std::setw(10) << "|" << std::setw(12) << Astronaut::astronauts[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Astronaut::astronauts[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -689,10 +948,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Employee::countEmployee; i++)
 		{
-			if (getSpaceSuit(Employee::employee[i]) == S3)
+			if (Employee::employee[i].getSpaceSuit() == S3)
 			{
 				std::string spaceSuit = "S3";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Employee::employee[i].getName() << std::setw(10) << "|" << std::setw(12) << Employee::employee[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Employee::employee[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -707,10 +966,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
 		{
-			if (getSpaceSuit(Astronaut::astronauts[i]) == S3)
+			if (Astronaut::astronauts[i].getSpaceSuit() == S3)
 			{
 				std::string spaceSuit = "S3";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Astronaut::astronauts[i].getName() << std::setw(10) << "|" << std::setw(12) << Astronaut::astronauts[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Astronaut::astronauts[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -725,10 +984,10 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Employee::countEmployee; i++)
 		{
-			if (getSpaceSuit(Employee::employee[i]) == S4)
+			if (Employee::employee[i].getSpaceSuit() == S4)
 			{
 				std::string spaceSuit = "S4";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Employee::employee[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Employee::employee[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Employee::employee[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Employee::employee[i].getName() << std::setw(10) << "|" << std::setw(12) << Employee::employee[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Employee::employee[i].getAge() << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
@@ -743,44 +1002,158 @@ namespace GEV
 		std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 		for (int i = 0; i < Astronaut::countAstronauts; i++)
 		{
-			if (getSpaceSuit(Astronaut::astronauts[i]) == S4)
+			if (Astronaut::astronauts[i].getSpaceSuit() == S4)
 			{
 				std::string spaceSuit = "S4";
-				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << getName(Astronaut::astronauts[i]) << std::setw(10) << "|" << std::setw(12) << getSurname(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(12) << getAge(Astronaut::astronauts[i]) << std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(10) << Astronaut::astronauts[i].getName()<< std::setw(10) << "|" << std::setw(12) << Astronaut::astronauts[i].getSurname() << std::setw(12) << "|" << std::setw(12) << Astronaut::astronauts[i].getAge()<< std::setw(12) << "|" << std::setw(13) << spaceSuit << std::setw(12) << "|" << std::endl;
 				std::cout << "----------------------------------------------------------------------------------------------------------------" << std::endl;
 			}
 		}
 		system("pause");
 	}
 
-	std::string getName(Human& human)
+	void filtrCargoReadyToLaunch()
 	{
-		return human.name;
+		std::cout << "Отфильтрованная база данных грузовых кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			if (CargoSpaceShip::cargoSpaceShips[i].getCondition() == readyToLunch)
+			{
+				std::string condition = "Готов к вылету";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
-	std::string getSurname(Human& human)
+	void filtrCargoBroken()
 	{
-		return human.surname;
+		std::cout << "Отфильтрованная база данных грузовых кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			if (CargoSpaceShip::cargoSpaceShips[i].getCondition() == broken)
+			{
+				std::string condition = "Сломан";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
-	int getAge(Human& human)
+	void filtrCargoLaunchPlanned()
 	{
-		return human.age;
+		std::cout << "Отфильтрованная база данных грузовых кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			if (CargoSpaceShip::cargoSpaceShips[i].getCondition() == launhPlanned)
+			{
+				std::string condition = "";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
-	std::string getLogin(Human& human)
+	void filtrCargoRepair()
 	{
-		return human.login;
+		std::cout << "Отфильтрованная база данных грузовых кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < CargoSpaceShip::countCargoSpaceShips; i++)
+		{
+			if (CargoSpaceShip::cargoSpaceShips[i].getCondition() == repair)
+			{
+				std::string condition = "Ремонт";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << CargoSpaceShip::cargoSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << CargoSpaceShip::cargoSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
-	std::string getPassword(Human& human)
+	void filtrHighSpeedReadyToLaunch()
 	{
-		return human.password;
+		std::cout << "Отфильтрованная база данных высокоскоростных кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			if (HighSpeedSpaceShip::highSpeedSpaceShips[i].getCondition() == readyToLunch)
+			{
+				std::string condition = "Готов к вылету";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
-	SpaceSuit getSpaceSuit(Human& human)
+	void filtrHighSpeedBroken()
 	{
-		return human.spaceSuit;
+		std::cout << "Отфильтрованная база данных высокоскоростных кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			if (HighSpeedSpaceShip::highSpeedSpaceShips[i].getCondition() == broken)
+			{
+				std::string condition = "Сломан";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrHighSpeedLaunchPlanned()
+	{
+		std::cout << "Отфильтрованная база данных высокоскоростных кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			if (HighSpeedSpaceShip::highSpeedSpaceShips[i].getCondition() == broken)
+			{
+				std::string condition = "";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
+	}
+
+	void filtrHighSpeedRepair()
+	{
+		std::cout << "Отфильтрованная база данных высокоскоростных кораблей:" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		std::cout << "|        #        |        Имя корабля        |        Состояние        |        Дата        |        Время        |        Имя пилота        |        Фамилия пилота        |" << std::endl;
+		std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+		for (int i = 0; i < HighSpeedSpaceShip::countHighSpeedSpaceShips; i++)
+		{
+			if (HighSpeedSpaceShip::highSpeedSpaceShips[i].getCondition() == broken)
+			{
+				std::string condition = "Ремонт";
+				std::cout << "|" << std::setw(9) << i + 1 << std::setw(9) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getName() << std::setw(14) << "|" << std::setw(12) << condition << std::setw(12) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getDate() << std::setw(10) << "|" << std::setw(11) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getTime() << std::setw(11) << "|" << std::setw(14) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getName() << std::setw(13) << "|" << std::setw(15) << HighSpeedSpaceShip::highSpeedSpaceShips[i].getPilot().getSurname() << std::setw(16) << "|" << std::endl;
+				std::cout << "------------------------------------------------------------------------------------------------------------------------------------------------------------------------------" << std::endl;
+			}
+		}
+		system("pause");
 	}
 
 	void addEmployee()
@@ -820,6 +1193,45 @@ namespace GEV
 		delete[] Astronaut::astronauts;
 		Astronaut::astronauts = newAstronauts;
 	}
+
+	void addCargo()
+	{
+		std::cout << "Сколько вы хотите добавить грузовых кораблей: ";
+		int count = 0;
+		std::cin >> count;
+		CargoSpaceShip::countCargoSpaceShips += count;
+		CargoSpaceShip* newCargoSpaceShips = new CargoSpaceShip[CargoSpaceShip::countCargoSpaceShips];
+		for (int i = 0; i < (CargoSpaceShip::countCargoSpaceShips - count); i++)
+		{
+			newCargoSpaceShips[i] = CargoSpaceShip::cargoSpaceShips[i];
+		}
+		for (int i = 0; i < count; i++)
+		{
+			std::cin >> newCargoSpaceShips[i + CargoSpaceShip::countCargoSpaceShips - count];
+		}
+		delete[] CargoSpaceShip::cargoSpaceShips;
+		CargoSpaceShip::cargoSpaceShips = newCargoSpaceShips;
+	}
+
+	void addHighSpeed()
+	{
+		std::cout << "Сколько вы хотите добавить высокоскоростных кораблей: ";
+		int count = 0;
+		std::cin >> count;
+		HighSpeedSpaceShip::countHighSpeedSpaceShips += count;
+		HighSpeedSpaceShip* newHighSpeedSpaceShips = new HighSpeedSpaceShip[HighSpeedSpaceShip::countHighSpeedSpaceShips];
+		for (int i = 0; i < (HighSpeedSpaceShip::countHighSpeedSpaceShips - count); i++)
+		{
+			newHighSpeedSpaceShips[i] = HighSpeedSpaceShip::highSpeedSpaceShips[i];
+		}
+		for (int i = 0; i < count; i++)
+		{
+			std::cin >> newHighSpeedSpaceShips[i + HighSpeedSpaceShip::countHighSpeedSpaceShips - count];
+		}
+		delete[] HighSpeedSpaceShip::highSpeedSpaceShips;
+		HighSpeedSpaceShip::highSpeedSpaceShips = newHighSpeedSpaceShips;
+	}
+
 	void printEmployee()
 	{
 		Employee print;
@@ -830,5 +1242,17 @@ namespace GEV
 	{
 		Astronaut print;
 		print.print(Astronaut::astronauts, Astronaut::countAstronauts);
+	}
+
+	void printHighSpeed()
+	{
+		HighSpeedSpaceShip print;
+		print.print(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+	}
+
+	void printCargo()
+	{
+		CargoSpaceShip print;
+		print.print(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
 	}
 }

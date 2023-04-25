@@ -11,6 +11,6 @@ namespace GEV
 	public:
 		static HighSpeedSpaceShip* highSpeedSpaceShips;
 		static int countHighSpeedSpaceShips;
-		//void print(SpaceShip* spaceShips, int countSpaceShips) override;
+		void print(SpaceShip* spaceShips, int countSpaceShips) override;
 	};
 }
