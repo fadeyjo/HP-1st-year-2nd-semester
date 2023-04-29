@@ -33,7 +33,24 @@ namespace GEV
 			printMenu(menu, countMenuItems);
 			std::cout << "Введите команду: ";
 			int command = 0;
-			std::cin >> command;
+			do
+			{
+				try
+				{
+					if (!(std::cin >> command)) throw 1;
+					if (std::cin.peek() != '\n') throw 2;
+					if (command < 1) throw 3;
+					if (command > countMenuItems) throw 4;
+				}
+				catch (int i)
+				{
+					if (i == 1) std::cin.clear();
+					while (std::cin.get() != '\n');
+					std::cerr << "Некорректный ввод. Повторите ввод.\n";
+					continue;
+				}
+				break;
+			} while (true);
 			system("cls");
 			switch (command)
 			{
@@ -133,7 +150,7 @@ namespace GEV
 				}
 				break;
 			}
-			default:
+			case 9:
 			{
 				if (menu[8]->isSubMenu)
 				{
@@ -145,16 +162,40 @@ namespace GEV
 				}
 				break;
 			}
+			default:
+			{
+				std::cout << "Неизвестная команда." << std::endl;
+				system("pause");
+				break;
+			}
 			}
 			system("cls");
 		}
 	}
+
 	void Menu::runSubMenu(Menu** subMenu, int countSubMenuItems)
 	{
 		printMenu(subMenu, countSubMenuItems);
 		std::cout << "Введите команду: ";
 		int command = 0;
-		std::cin >> command;
+		do
+		{
+			try
+			{
+				if (!(std::cin >> command)) throw 1;
+				if (std::cin.peek() != '\n') throw 2;
+				if (command < 1) throw 3;
+				if (command > countSubMenuItems) throw 4;
+			}
+			catch (int i)
+			{
+				if (i == 1) std::cin.clear();
+				while (std::cin.get() != '\n');
+				std::cerr << "Некорректный ввод. Повторите ввод.\n";
+				continue;
+			}
+			break;
+		} while (true);
 		system("cls");
 		switch (command)
 		{

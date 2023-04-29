@@ -11,6 +11,7 @@
 #include "CargoSpaceShip.h"
 #include "HighSpeedSpaceShip.h"
 #include "Container.h"
+#include <limits>
 
 
 namespace GEV
