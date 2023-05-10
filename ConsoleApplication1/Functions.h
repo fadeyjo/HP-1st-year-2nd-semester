@@ -12,6 +12,7 @@
 #include "HighSpeedSpaceShip.h"
 #include "Container.h"
 #include <limits>
+#include "SearchMinMax.h"
 
 
 namespace GEV
@@ -76,9 +77,5 @@ namespace GEV
 	void addCargo();
 	void addHighSpeed();
 	void maxPropertyCargo();
-
-	 template<typename T>
-	 T maxWeigth(T* base, int count);
-
-	 void maxPropertyHighSpeed();
+	void maxPropertyHighSpeed();
 }

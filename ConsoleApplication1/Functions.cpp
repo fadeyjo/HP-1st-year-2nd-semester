@@ -234,7 +234,7 @@ namespace GEV
 				}
 				break;
 			} while (true);
-			spaceShip.pilot = Astronaut::astronauts[command - 1];
+			spaceShip.pilot = Astronaut::astronauts[commandId - 1];
 			return in;
 	}
 
@@ -631,34 +631,38 @@ namespace GEV
 		Menu::lastMenu = userMenu;
 	}
 
-	template<typename T>
-	T maxWeigth(T* base, int count)
-	{
-		T max = base[0];
-		for (int i = 1; i < count; i++)
-		{
-			if (base[i] > max)
-			{
-				max = base[i];
-			}
-		}
-		return max;
-	}
-
 	void maxPropertyCargo()
 	{
-		CargoSpaceShip cargoSpaceShip = maxWeigth<CargoSpaceShip>(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
-		std::cout << "Самый тяжёлый грузовой корабль." << std::endl << std::endl;
-		std::cout << cargoSpaceShip;
-		system("pause");
+		if (CargoSpaceShip::countCargoSpaceShips < 1)
+		{
+			std::cout << "Пустая база данных грузовых кораблей." << std::endl;
+			system("pause");
+		}
+		else
+		{
+			SearchMinMax<CargoSpaceShip>base(CargoSpaceShip::cargoSpaceShips, CargoSpaceShip::countCargoSpaceShips);
+			CargoSpaceShip cargoSpaceShip = base.maxWeigth();
+			std::cout << "Самый тяжёлый грузовой корабль." << std::endl << std::endl;
+			std::cout << cargoSpaceShip;
+			system("pause");
+		}
 	}
 
 	void maxPropertyHighSpeed()
 	{
-		HighSpeedSpaceShip highSpeedSpaceShip = maxWeigth<HighSpeedSpaceShip>(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
-		std::cout << "Самый тяжёлый высокоскоростной корабль." << std::endl << std::endl;
-		std::cout << highSpeedSpaceShip;
-		system("pause");
+		if (HighSpeedSpaceShip::countHighSpeedSpaceShips < 1)
+		{
+			std::cout << "Пустая база данных высокоскоростныч кораблей." << std::endl;
+			system("pause");
+		}
+		else
+		{
+			SearchMinMax<HighSpeedSpaceShip>base(HighSpeedSpaceShip::highSpeedSpaceShips, HighSpeedSpaceShip::countHighSpeedSpaceShips);
+			HighSpeedSpaceShip highSpeedSpaceShip = base.maxWeigth();
+			std::cout << "Самый тяжёлый высокоскоростной корабль." << std::endl << std::endl;
+			std::cout << highSpeedSpaceShip;
+			system("pause");
+		}
 	}
 
 	void writeTheAction()

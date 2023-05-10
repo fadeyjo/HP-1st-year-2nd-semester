@@ -149,6 +149,7 @@
     <ClInclude Include="Human.h" />
     <ClInclude Include="Iterator.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="SearchMinMax.h" />
     <ClInclude Include="SpaceShip.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
